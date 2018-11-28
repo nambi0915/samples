@@ -18,7 +18,7 @@ public class OwnerDetailsParser {
 	public static JSONObject ownerPhoneJson = new JSONObject();
 
 	public static void main(String args[]) throws Exception {
-		File folder = new File("/home/aberami/Documents/Figo/samp/");
+		File folder = new File("C:\\Users\\Nambi\\Downloads\\Figo\\Txt");
 		File[] listOfXmlFiles = folder.listFiles();
 		Scanner s = new Scanner(System.in);
 		System.err.println("Total files: " + listOfXmlFiles.length);
@@ -27,13 +27,12 @@ public class OwnerDetailsParser {
 		Double time;
 		OwnerDetailsParser ownerParser = new OwnerDetailsParser();
 
-		for (int i = 0, choice = 1; choice == 1
-				&& i < listOfXmlFiles.length; i++) {
+		for (int i = 0, choice = 1; choice == 1 && i < listOfXmlFiles.length; i++) {
 			long startTime = System.nanoTime();
 			File xmlFile = listOfXmlFiles[i];
-			System.err.println(xmlFile.getName());
 			List<String> blocks = regex.newXmlParserWithLineWordCoord(xmlFile);
 			ownerParser.ownerdetailsExtract(blocks);
+			System.err.println(xmlFile.getName());
 			System.out.println(ownerDetailsJson.toString(2));
 			ownerDetailsJson = new JSONObject();
 			ownerNameJson = new JSONObject();
@@ -46,6 +45,7 @@ public class OwnerDetailsParser {
 			System.out.println("Execution Time: " + time + " seconds");
 			timeDuration.put(xmlFile.getName(), time);
 			choice = s.nextInt();
+			System.out.flush();
 		}
 		s.close();
 	}
@@ -56,29 +56,30 @@ public class OwnerDetailsParser {
 			String block = blocks.get(i);
 
 			Matcher ownerDetails = Pattern.compile(
-					"(^(?!.*(?:(?i)\\bdoctor\\b|\\bveterinary\\b|\\banimal\\b|\\bhospital\\b|\\bcare\\b|\\bpet |\\bclinic\\b|vet|\\bpharmacy\\b))[\\\\u2019'\\-\\/A-Z\\.a-z\\d:\\ &{}()#\\\\]*$)\\n([#A-Z]?\\d+[\\/\\.\\-A-Za-z,#:() \\d]+?\\n([\\.\\-A-Za-z,\\/#:() \\d]+?\\n)?[\\/\\.\\-A-Za-z,#() \\d]+?(?:[A-Z]{1,2}|[.A-Za-z]+?),? ?(?:\\d{2,}-)?\\d{2,})",
+					"(^(?!.*(?:(?i)\\bdoctor\\b|\\bveterinary\\b|\\banimal\\b|\\bhospital\\b|\\bcare\\b|\\bpet |\\bclinic\\b|vet|\\bpharmacy\\b))[\\\\u2019'*\\-\\/,A-Z\\.a-z\\d:\\ &{}()#\\\\]*$)(?:\\nP.O.Box\\h#\\d+)?\\n([#A-Z]?\\d+[\\/\\.\\-A-Za-z,#:() \\d*!]+?\\n([\\.\\-A-Za-z,\\/#:() \\d*]+?\\n)?[\\/\\.\\-A-Za-z,#() \\d*^]+?(?:[A-Z]{1,2}|[.A-Za-z]+?),? ?(?:\\d{2,}-)?\\d{2,})",
 					Pattern.MULTILINE).matcher(block);
 			if (ownerDetails.find()) {
-
+				System.out.println(block);
 				String ownerName = nameCleansing(ownerDetails.group(1).trim());
-				String ownerAddress = addressCleansing(
-						ownerDetails.group(2).trim());
+				String ownerAddress = addressCleansing(ownerDetails.group(2).trim());
 				// System.out.println(ownerAddress + "\n");
-				if (isAddressValid(ownerAddress)
-						&& isNameValid(ownerName, block)) {
-					System.err.println(block);
+				boolean nameValid = isNameValid(ownerName, block);
+				boolean addressValid = isAddressValid(ownerAddress);
+				ownerName = ownerName.replaceAll("\\d", "");
+				System.err.println("Name: " + nameValid + " Address: " + addressValid);
+				if (nameValid && addressValid) {
+					// System.out.println(block);
 					ownerAddressJson.put("text", ownerAddress);
 					ownerNameJson.put("text", ownerName);
 					matchFound = true;
 				}
 
-				Matcher phone = Pattern.compile(
-						"(\\(?\\d{3}[\\/\\);.-]? ?\\d{3} ?[.\\-]? ?\\d{4})")
-						.matcher(block);
-				if (phone.find()) {
-					String ownerPhone = phone.group(1).replaceAll("\\.", "-")
-							.trim();;
-					ownerPhoneJson.put("text", ownerPhone);
+				if (matchFound == true) {
+					Matcher phone = Pattern.compile("(\\(?\\d{3}[\\/\\);.-]? ?\\d{3} ?[.\\-]? ?\\d{4})").matcher(block);
+					if (phone.find()) {
+						String ownerPhone = phone.group(1).replaceAll("\\.", "-").trim();
+						ownerPhoneJson.put("text", ownerPhone);
+					}
 				}
 			}
 			ownerDetailsJson.put("ownerName", ownerNameJson);
@@ -88,26 +89,25 @@ public class OwnerDetailsParser {
 	}
 
 	private String nameCleansing(String ownerName) {
-
-		ownerName = ownerName.replaceAll("FOR:|[Cc]lient", "")
-				.replaceAll("[{(] *(#|ft|[A-Z]) *\\d*?[)}]", "")
-				.replaceAll("[^A-Za-z \\/.&()\\u2019']", "").trim();
+		ownerName = ownerName.replaceAll("FOR:|[Cc]lient", "").replaceAll("[{(] *(#|ft|[A-Z]) *[\\d]*?[)}]", "")
+				.replaceAll("[^A-Za-z \\/.&()\\u2019'\\d]", "").trim();
 
 		return ownerName;
 	}
+
 	private String addressCleansing(String ownerAddress) {
 
-		ownerAddress = ownerAddress.replaceAll("\\n|\\|", ",")
-				.replaceAll("[^()#\\/A-Za-z-\\d,. ]", "")
-				.replaceAll("\\( *\\)", "").replaceAll("[hH]ome|[pP]hone", "")
-				.replaceAll("\\s{2,}", "").replaceAll(",{2,}", ",").trim();
+		ownerAddress = ownerAddress.replaceAll("\\n|\\|", ",").replaceAll("[^()#\\/A-Za-z-\\d,. ]", "")
+				.replaceAll("\\( *\\)", "").replaceAll("[hH]ome|[pP]hone", "").replaceAll("\\s{2,}", "")
+				.replaceAll(",{2,}", ",").trim();
 
 		return ownerAddress;
 	}
+
 	private boolean isNameValid(String ownerName, String block) {
 		System.err.println(ownerName);
-		if (Pattern.compile("[A-Za-z]").matcher(ownerName).find()
-				&& ownerName.matches("^(\\S+?(?: |$)){1,7}")
+		if (Pattern.compile("[A-Za-z]").matcher(ownerName).find() && ownerName.matches("^(\\S+?(?: |$)){1,7}")
+				&& !Pattern.compile("^\\d", Pattern.MULTILINE).matcher(ownerName).find()
 				&& !Pattern.compile(
 						"((?i)\\bdoctor\\b|\\bveterinary\\b|\\banimal\\b|\\bhospital\\b|\\bcare\\b|\\bpet |\\bclinic\\b|vet|\\bpharmacy\\b)")
 						.matcher(block).find()) {
@@ -116,6 +116,7 @@ public class OwnerDetailsParser {
 		}
 		return false;
 	}
+
 	private boolean isAddressValid(String ownerAddress) {
 		if (Pattern.compile("[A-Za-z]").matcher(ownerAddress).find()) {
 			// System.err.println("addr valid");

@@ -1,13 +1,37 @@
+package demo;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
-public class Exp {
+public class JavaUtilFunction {
 
 	public static void main(String args[]) {
 
-		forEachAndConsumerDemo();
+		// forEachAndConsumerDemo();
+		supplierFunctionDemo();
+
+	}
+
+	private static void supplierFunctionDemo() {
+		Supplier<Integer> supply = () -> {
+			return 1;
+		};
+		System.err.println(supply.get());
+		Function<Integer, Integer> add = (i) -> {
+			return i = i + 4;
+		};
+		Function<Integer, Integer> multiply = (i) -> {
+			return i = i * 8;
+		};
+
+		// First add and then multiply
+		System.out.println(add.andThen(multiply).apply(4));
+
+		// First multiply and add
+		System.out.println(add.compose(multiply).apply(4));
 
 	}
 

@@ -191,7 +191,7 @@ public class HospitalDetailsParser {
 						lineCoordinatesJson.put("block" + Integer.toString(blocks.size()), blockJson);
 						String blockOfText = blockSb.toString();
 						blocks.add(blockOfText);
-						// System.err.println("Block:\n" + blockOfText);
+						System.err.println("Block:\n" + blockOfText);
 					}
 
 					totalWordsInDocument += wordCount;
@@ -204,7 +204,7 @@ public class HospitalDetailsParser {
 			// System.out.println(lineCoordinatesJson.toString(4));
 			// System.err.println(blocks);
 		} catch (Exception e) {
-			regex.oldXmlParserWithLineWordCoord(file);
+			e.printStackTrace();
 		}
 		return blocks;
 
@@ -218,10 +218,8 @@ public class HospitalDetailsParser {
 		wordJson.put("left", wordLeft);
 		wordJson.put("right", wordRight);
 		wordJson.put("bottom", wordBottom);
-		// System.err.println("word" + Integer.toString(blockSize) + "b"
-		// + Integer.toString(wordCount) + "w");
-		wordCoordinatesJson.put("word" + Integer.toString(blockSize) + "b" + Integer.toString(wordCount) + "w",
-				wordJson);
+		wordCoordinatesJson.put(
+				"word" + String.format("%03d", blockSize) + "b" + String.format("%03d", wordCount) + "w", wordJson);
 
 	}
 
@@ -379,7 +377,7 @@ public class HospitalDetailsParser {
 				bottom = Integer.MIN_VALUE;
 		for (int i = 0, j = 0; j != word.length; i++) {
 			JSONObject wordCoord = (JSONObject) wordCoordinatesJson
-					.get("word" + Integer.toString(blockNumber) + "b" + Integer.toString(i) + "w");
+					.get("word" + String.format("%03d", blockNumber) + "b" + String.format("%03d", i) + "w");
 			// System.err.println(wordCoord.getString("text"));
 			if (wordCoord.getString("text").contains(word[j])) {
 				j++;
