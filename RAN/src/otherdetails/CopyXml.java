@@ -2,6 +2,7 @@ package otherdetails;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import org.apache.commons.io.FileUtils;
 
@@ -25,7 +26,11 @@ public class CopyXml {
 			} catch (Exception e) {
 				System.err.println("Exception !!!!!!!!!");
 			}
+
 		}
+		// URL url = new URL("http://www.google.com");
+		// FileUtils.copyURLToFile(url, new
+		// File("C:\\Users\\Nambi\\Downloads\\nambi.txt"));
 		System.err.println(count);
 
 	}
