@@ -1,0 +1,12 @@
+date,region_code,players
+2005-10-30,101,sachin:rahul:kallis
+2005-10-25,101,sachin:abd::
+2006-01-15,102,younis:yuvraj:dhoni
+2006-01-18,102,yuvraj:sachin
+2006-01-15,102,younis:yuvraj:dhoni
+2007-05-20,101,sehwag:sachin:ponting::
+2007-05-25,101,hayden:yuvraj:ponting
+2007-05-30,101,clarke:sehwag::ponting
+2008-02-20,103,jaysurya:sangkara:ganguly::
+2008-02-25,103,sachin:yuvraj:attpattu
+2008-02-30,103,sachin:sehwag:tharanga
