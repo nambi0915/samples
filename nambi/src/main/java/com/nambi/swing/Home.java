@@ -1,18 +1,21 @@
 package com.nambi.swing;
 
 import java.awt.Color;
-
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 public class Home extends JFrame {
@@ -24,24 +27,36 @@ public class Home extends JFrame {
 		label.setBounds(25, 10, 400, 30);
 		add(label);
 
+		JPanel controlPanel = new JPanel();
+		controlPanel.setLayout(new FlowLayout());
+
 		JButton delete = new JButton("Delete");
 		final JButton selectDirButton = new JButton("Select Folder");
 
 		selectDirButton.setBackground(Color.white);
 		delete.setBackground(Color.white);
 		selectDirButton.setBounds(0, 50, 200, 40);
-		delete.setBounds(0, 150, 200, 40);
 
+		delete.setBounds(0, 100, 200, 40);
+		controlPanel.setBounds(210, 50, 450, 200);
+
+		selectDirButton.setFocusPainted(false);
 		add(selectDirButton);
 		add(delete);
 		final JList<File> selectedfolderList = new JList<File>();
-		selectedfolderList.setBounds(210, 50, 450, 305);
-		add(selectedfolderList);
-		selectedfolderList.setVisible(true);
+		selectedfolderList.setLayoutOrientation(JList.VERTICAL);
+		// selectedfolderList.setBounds(210, 50, 450, 200);
+		selectedfolderList.setBorder(BorderFactory.createLoweredBevelBorder());
+		// selectedfolderList.setVisibleRowCount(5);
+		// add(selectedfolderList);
+		// selectedfolderList.setVisible(true);
 
-		setSize(700, 500);
+		JScrollPane vegListScrollPane = new JScrollPane(selectedfolderList);
+
+		controlPanel.add(vegListScrollPane);
+		add(controlPanel);
+		setSize(700, 400);
 		setLayout(null);
-		selectDirButton.setFocusPainted(false);
 
 		selectDirButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
