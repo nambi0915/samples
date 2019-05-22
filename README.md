@@ -29,7 +29,7 @@ func squares() func() int {
     f := squares()
     fmt.Println(f()) // "1"
     fmt.Println(f()) // "4"
-	fmt.Println(f()) // "9"
+    fmt.Println(f()) // "9"
 ```
 
 * The variable `f` will contain the func()
