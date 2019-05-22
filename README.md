@@ -13,4 +13,4 @@ Find the code for `squares` in your enviroment, analyze that code
 ## Step 3:
 
 Run the code 
-	go run  github.com/elephantscale/gopl.io/ch5/squares/main.go
+```go run  github.com/elephantscale/gopl.io/ch5/squares/main.go```
