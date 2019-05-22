@@ -23,7 +23,7 @@ func squares() func() int {
 ```
 
 * Calling `squares()` will return a anonymous `func() int`
-* The `func()` will access `var x` outside its body
+* The func() will access `var x` present outside the body
 
 ```
     f := squares()
@@ -31,6 +31,6 @@ func squares() func() int {
     fmt.Println(f()) // "4"
 ```
 
-* The variable `f` will contain `func()`
-* Increments `x` everytime while calling
-* `g := squares()` will pass a new `func()` with x=0
+* The variable `f` will contain the func()
+* Increments x everytime while calling
+* Calling again `g := squares()` will pass a new func() with x=0
