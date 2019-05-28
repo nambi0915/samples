@@ -1,21 +1,41 @@
-# Lab 6.1: Interfaces
+# Lab 6.2: Interfaces
 
-## Step 1: Run the code for bytecounter
+## Step 1: Run the code for sleep
 
 fetch, build, install
 
-    $ go get github.com/elephantscale/gopl.io/ch7/bytecounter
+    $ go get github.com/elephantscale/gopl.io/ch7/sleep
 
-* Analyse the code in `github.com/elephantscale/gopl.io/ch7/bytecounter`
+* Analyse the code in `github.com/elephantscale/gopl.io/ch7/sleep`
 
-## Step 2:
+```
+$ go build gopl.io/ch7/sleep
+$ ./sleep
+Sleeping for 1s...
+$ ./sleep -period 50ms
+Sleeping for 50ms...
+$ ./sleep -period 2m30s
+Sleeping for 2m30s...
+```
 
-Using the ideas from ByteCounter, implement counters for words and for lines. You will find `bufio.ScanWords` useful.
+## Step 2: Run the code for tempflag
+
+fetch, build, install
+
+    $ go get github.com/elephantscale/gopl.io/ch7/tempflag
+
+* Analyse the code in `github.com/elephantscale/gopl.io/ch7/tempflag`
+
+```
+$ go build gopl.io/ch7/tempflag
+$ ./tempflag
+20°C
+$ ./tempflag -temp -18C
+-18°C
+$ ./tempflag -temp 212F
+100°C
+```
 
 ## Step 3:
 
-Write a function `CountingWriter` with the signature below that, given an io.Writer, returns a new Writer that wraps the original, and a pointer to an int64 variable that at any moment contains the number of bytes written to the new Writer.
-
-```
-func CountingWriter(w io.Writer) (io.Writer, *int64)
-```
+Add support for Kelvin temperatures to tempflag.
