@@ -1,6 +1,5 @@
 package demo;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -16,7 +15,7 @@ public class ED {
 	// String nambi = "TmFtYmk=";
 	// System.out.println(encodedStr);
 
-	String decodedStr = new String(Base64.getDecoder().decode(encodedPassword));
-	System.out.println(decodedStr);
+	String decodedPassword = new String(Base64.getDecoder().decode(encodedPassword));
+	System.out.println(decodedPassword);
     }
 }
